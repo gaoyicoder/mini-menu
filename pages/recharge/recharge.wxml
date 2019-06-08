@@ -1,0 +1,27 @@
+<!--pages/recharge/recharge.wxml-->
+<view class="place5"></view>
+<view class="balance-total">
+  <text class='balance-label'>账户余额：</text><text class='balance-value'>{{userBalance}} 元</text>
+</view>
+<view class="place10"></view>
+<scroll-view class="recharge-box" scroll-y="true" style="height:{{winHeight-106}}px;">
+  <radio-group class="radio-group" bindchange="rechargeRadioChange">
+    <label wx:for="{{rechargeTypeList}}" wx:key="rechargeTypeKey" wx:for-item="rechargeType" wx:for-index="idx">
+      <view class="recharge-radio-section {{checkedRechargeType.id==rechargeType.id?'active':''}}">
+        <radio hidden='true' value="{{rechargeType.id}}" />
+        <view class='recharge_radio_logo'><image style="height: 25px; width:25px;" src="https://api.gaoyicoder.com/images/menu/recharge_logo.png" ></image></view>
+        <view class='recharge_radio_text'>充<text class="real-value">{{rechargeType.realValue}}</text>送<text class="recharge-value">{{rechargeType.rechargeValue-rechargeType.realValue}}</text></view>
+        <view class='recharge_radio_hot' wx:if="{{rechargeType.isHot==1}}">HOT</view>
+      </view>
+    </label>
+  </radio-group>
+</scroll-view>
+
+<view class="takeBill" >
+  <view class="box-left" wx:if="{{checkedRechargeType}}">
+    充<text class="real-value">{{checkedRechargeType.realValue}}</text>送<text class="recharge-value">{{checkedRechargeType.rechargeValue-checkedRechargeType.realValue}}</text>
+  </view>
+  <button class="box-right" bindtap="payRecharge">
+  充值
+  </button>
+</view>

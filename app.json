@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/order/order",
+    "pages/transaction/transaction",
+    "pages/balance/balance",
+    "pages/recharge/recharge",
+    "pages/rechargeSuccess/rechargeSuccess",
+    "pages/orderHistory/orderHistory",
+    "pages/rechargeHistory/rechargeHistory"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

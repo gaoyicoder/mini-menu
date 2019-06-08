@@ -1,0 +1,14 @@
+/* pages/orderHistory/orderHistory.wxss */
+
+.order-list{border-top:1px solid #E6E6E6;border-bottom:1px solid #E6E6E6;margin-top:-1px;padding:10px 15px;}
+.order-list>text{color:#3c3c3c;font-size:14px;margin-bottom:6px;display:block;}
+.order-list .time{color:#999;font-size:13px;text-align:right;}
+.history-order-list {
+  padding:5px 15px;
+  font-size: 15px;
+}
+
+.food-detail{overflow:hidden;}
+.food-detail>text{float:left;color:#3c3c3c;font-size:14px;display:block;}
+.food-detail>view{float:right;}
+.food-detail>view text{font-size:14px;color:#999;}

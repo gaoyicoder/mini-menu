@@ -1,0 +1,7 @@
+<view class="tips">
+    <view class="place"></view>
+    <image src="https://api.gaoyicoder.com/images/menu/success.png" mode="widthFix"></image>
+    <text>充值成功</text>
+</view>
+<navigator url="../order/order?currentTab=0" hover-class="navigator-hover" class="continueBook">开始点餐</navigator>
+<navigator url="../order/order?currentTab=1" hover-class="navigator-hover" class="myOrder">个人中心</navigator>

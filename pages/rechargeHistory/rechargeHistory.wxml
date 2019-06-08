@@ -1,0 +1,7 @@
+<view class="history-recharge-list">充值记录</view>
+<view class="recharge-list" wx:for="{{rechargeList}}" wx:key="rechargeList" wx:for-item="recharge">
+  <text>充值单号：{{recharge.tradeNo}}</text>
+  <text>实充金额：￥{{recharge.realValue}}</text>
+  <text>赠送金额：￥{{recharge.rechargeValue-recharge.realValue}}</text>
+  <view class="time">{{recharge.createdAt}}</view>
+</view>

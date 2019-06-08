@@ -1,0 +1,7 @@
+.recharge-list{border-top:1px solid #E6E6E6;border-bottom:1px solid #E6E6E6;margin-top:-1px;padding:10px 15px;}
+.recharge-list>text{color:#3c3c3c;font-size:14px;margin-bottom:6px;display:block;}
+.recharge-list .time{color:#999;font-size:13px;text-align:right;}
+.history-recharge-list {
+  padding:5px 15px;
+  font-size: 15px;
+}

@@ -1,0 +1,24 @@
+/* pages/recharge/recharge.wxss */
+.place5{height:5px;width:100%;background:#F0F0F0;}
+.place10{height:10px;width:100%;background:#F0F0F0;}
+
+.balance-total{height: 40px; padding: 0px 10px; line-height: 40px;}
+.balance-total .balance-label{font-size: 14px;}
+.balance-total .balance-value{font-size: 18px; color: #646464}
+
+.recharge-box{background: #F0F0F0;}
+.recharge-box .recharge-radio-section{height:50px; line-height:50xp; background: #FFF;margin: 0 5px 10px 5px; border-radius:6px;font-size: 16px; padding-left: 15px;}
+.recharge-box .recharge-radio-section.active{background: #000; color: #FFF;}
+.recharge-box .recharge-radio-section text{line-height: 50px;}
+.recharge-box .recharge-radio-section .recharge_radio_logo{float: left; margin: 12px 5px 0 0;}
+.recharge-box .recharge-radio-section .recharge_radio_text{float: left;}
+.recharge-box .recharge-radio-section .recharge_radio_text .recharge-value{font-size: 20px;}
+.recharge-box .recharge-radio-section .recharge_radio_hot{
+  float: right; height: 18px; width: 45px; background: #000;color: #FFF;
+  line-height: 18px; font-size: 14px;text-align: center;
+  border-radius:0 6px 0 6px;
+}
+
+.takeBill{height:50px;background:#fff;position:relative;}
+.takeBill .box-left{line-height: 48px;margin-left: 50px;}
+.takeBill .box-right{width:120px;height:52px;background:#000;position:absolute;right:0;top:-1px;border-radius:0;color:#fff;line-height:52px;text-align:center;}

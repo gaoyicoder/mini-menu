@@ -1,0 +1,46 @@
+<form bindsubmit="settlement" class="takeOrder">
+    <view class="place"></view>
+    <scroll-view class="swiper-vertical-box" scroll-y="true" style="height:{{winHeight-51}}px;">
+      <view class="food-detail {{idx==detail.length?'nobd':''}} nomt" wx:for="{{detail}}" wx:key="balanceMenu" wx:for-index="idx" >
+          <text>{{item.menuName}}</text>
+          <view>
+              <text>￥</text>{{item.price}}<text>×{{item.num}}</text>
+          </view>
+      </view>
+      <view class="place"> </view>
+      <view class="food-detail">
+          <text>餐桌号</text>
+          <view class='picker'>
+            <picker bindchange="bindTableChange" value="{{tableIndex}}" range="{{tableList}}"  range-key="name">
+              <view>
+                {{tableList[tableIndex].name}}
+              </view>
+            </picker>
+          </view>
+      </view>
+      <view class="food-detail">
+          <text>备注</text>
+          <view>
+              <input type="text" placeholder="口味、偏好等" placeholder-style="color:#999;font-size:18px;" name="remarks"/>
+          </view>
+      </view>
+      <view class="place"> </view>
+      <view class="balance-detail {{userBalance<=0 ? 'none-balance' : ''}}">
+          <text class="text-left">会员余额（{{userBalance}}）</text>
+          <view class="view-right">
+            <checkbox-group bindchange="balanceChange" style="fload: right;">
+              <checkbox value="1" disabled="{{userBalance<=0 ? true : false}}" />
+            </checkbox-group>
+          </view>
+          <text class="text-right">-{{balanceMon}}</text>
+      </view>
+    </scroll-view>
+    <view class="takeBill" >
+        <view class="box-left">
+            金额：<text>￥{{cashMon}}</text>
+        </view>
+        <button class="box-right" disabled='{{buttonDisabled}}' formType="submit">
+        付款
+        </button>
+    </view>
+</form>

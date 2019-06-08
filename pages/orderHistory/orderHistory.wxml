@@ -1,0 +1,13 @@
+<view class="history-order-list">历史订单</view>
+<view class="order-list" wx:for="{{orderList}}" wx:key="order" wx:key="orderList" wx:for-item="order">
+  <text>订单号：{{order.id}}</text>
+  <view class="food-detail" wx:for="{{order.detail}}"  wx:key="orderDetailList" wx:for-item="orderDetail">
+    <text>{{orderDetail.menuName}}</text>
+    <view>
+      <text>￥{{orderDetail.price}}×{{orderDetail.num}}</text>
+    </view>
+  </view>
+  <text wx:if="{{order.remarks}}">备注：{{order.remarks}}</text>
+  <text>金额：￥{{order.subtotal}}</text>
+  <view class="time">{{order.createdAt}}</view>
+</view>

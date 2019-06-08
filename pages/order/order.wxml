@@ -1,0 +1,139 @@
+<view class="place"></view>
+<view class="swiper-tab">
+    <view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">点餐</view>
+    <view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">我的</view>
+</view>
+
+<swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{winHeight - 55}}px" bindchange="bindChange" circular="true">
+    <!-- 点餐 -->
+    <swiper-item>
+        <view class="book-box">
+            <view class="swiper-vertical-tab">
+                <view wx:for="{{menuTypeList}}" wx:for-item="menuType" wx:for-index="menuTypeIndex" wx:key="foodTab" class="{{currentType==menuTypeIndex ? 'on' : ''}}"  bindtap="chooseType" data-foodtype="{{menuTypeIndex}}">{{menuType.typeName}} 
+                </view> 
+            </view>
+            <scroll-view class="swiper-vertical-box" scroll-into-view="scroll_view_{{toView}}" scroll-y="true" style="height:{{winHeight-105}}px;" bindscrolltoupper="bindUpper" bindscrolltolower="bindLower" bindscroll="bindScroll">
+                <view class="vertical-list" wx:for="{{menuTypeList}}" wx:for-item="menuType1" wx:key="foodType" wx:for-index="idx" id="scroll_view_{{idx}}"> 
+                    <text class="title">{{menuType1.typeName}}</text>
+                    <view class="type-detail">
+                      <view wx:for="{{menuList[menuType1.id]}}" wx:for-item="menu" wx:key="foodDetail" wx:for-index="jdx">
+                        <image src="{{menu.imageUrl}}" mode="aspectFill"></image>
+                        <view class="book-detail">
+                          <text>{{menu.menuName}}</text>
+                          <view class='sale-number'>
+                            <text>销售{{menu.saleNumber}}</text>
+                          </view>
+                          <view class="money-row">
+                            <text class="money"><text class='money-symbol'>￥</text>{{menu.price}}</text>
+                            <view wx:if="{{menu.isSoldOut==0}}" class="operations">
+                              <button class="reduce" data-num="{{menu.num}}" bindtap="reduceFoodNum" wx:if="{{menu.num>0}}" data-idx="{{idx}}" data-jdx="{{jdx}}" data-menu-type-id="{{menu.menuTypeId}}" data-price="{{menu.price}}" data-foodName="{{menu.menuName}}"></button>
+                              <text wx:if="{{menu.num>0}}">{{menu.num}}</text>
+                              <button class="add" data-num="{{menu.num}}" bindtap="addFoodNum"  data-idx="{{idx}}
+                                data-jdx="{{jdx}}" data-menu-type-id="{{menu.menuTypeId}}" data-price="{{menu.price}}" data-foodName="{{menu.menuName}}"></button>
+                            </view>
+                          </view>
+                          <view class='menu-sold-out' wx:if="{{menu.isSoldOut==1}}">售罄</view>
+                        </view>
+                      </view>
+                    </view>
+                </view>
+            </scroll-view>
+        </view>  
+        
+        <!--下单-->
+        <view class="Bill-layer" wx:if="{{showCart&&sumNum>0}}" bindtap="hiddenLayer"></view>
+        <view class="Bill" >
+            <block wx:if="{{showCart&&sumNum>0}}">
+                <view class="clearCart">
+                    <button bindtap="clearCart">清空购物车</button>
+                </view>
+                <view class="book-result-detail" wx:for="{{menuList}}" wx:key="cartMenus" wx:for-item="menus" wx:for-index="idx">
+                    <view wx:for="{{menus}}" wx:for-index="jdx" wx:if="{{item.num>0}}" wx:key="cartMenu">
+                        <text>{{item.menuName}}</text>
+                        <view class="operations">
+                            <button class="reduce" data-num="{{item.num}}" bindtap="reduceFoodNum" wx:if="{{item.num>0}}" data-idx="{{idx}}" data-jdx="{{jdx}}" data-price="{{item.price}}" data-foodName="{{item.name}}" data-menu-type-id="{{item.menuTypeId}}"></button>
+                                <text wx:if="{{item.num>0}}">{{item.num}}</text>
+                            <button class="add" data-num="{{item.num}}" bindtap="addFoodNum"  data-idx="{{idx}}
+                                data-jdx="{{jdx}}" data-price="{{item.price}}" data-foodName="{{item.name}}" data-menu-type-id="{{item.menuTypeId}}"></button>
+                        </view>
+                    </view>
+                </view>
+                
+            </block>
+            
+            <view class="takeBill {{showCart?'':'bdt'}}" >
+                <view class="box-left" bindtap="seeDetailCart">
+                    <view class="tips">
+                        <view>{{sumNum}}</view>
+                    </view>
+                    <view class="moeny">￥{{sumMon}}</view>
+                </view>
+                <button class="box-right" bindtap="placeOrder">
+                下单
+                </button>
+            </view>
+        </view>
+
+
+    </swiper-item>
+
+    <!-- 订单 -->
+    <swiper-item>
+        <scroll-view class="order-box" scroll-y="true" style="height:{{winHeight-55}}px;">
+            <view class="page-body-info">
+                <view class="user-info-view">
+                    <view class='user-avata-view'>
+                        <open-data type="userAvatarUrl" class="user-avata"></open-data>
+                    </view>
+                    <view class='user-nickname-view'>
+                        <open-data type="userNickName" class="user-nickname"></open-data>
+                        <view class='user-is-member' wx:if="{{hasPhoneNumber===false}}">非会员</view>
+                        <view class='user-is-member' wx:else>会员</view>
+                    </view>
+                </view>
+                <view class="user-member-view">
+                    <view class='arrow'></view>
+                    <button wx:if="{{hasPhoneNumber===false}}" class='text'open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">
+                      <image src='https://api.gaoyicoder.com/images/menu/become_member.jpg'></image>成为会员
+                    </button>
+                    <button wx:else class='text' bindtap="goRecharge">
+                      <view>钱包</view>
+                      <view class='money'>{{userBalance}}元</view>
+                    </button>
+                </view>
+            </view>
+            <view class='member-space'></view>
+            <view class='member-center-list'>
+                <view>
+                    <view class='arrow'></view>
+                    <view class="list-item"  bindtap="goRechargeList">充值记录</view>
+                </view>
+                <view>
+                    <view class='arrow'></view>
+                    <view class="list-item"  bindtap="goOrderList">历史订单</view>
+                </view>
+            </view>
+            <view class='member-space'></view>
+            <view class="today-order-list">今日订单</view>
+            <block wx:if="{{orderList.length>0}}">
+              <view class="order-list"  wx:for="{{orderList}}" wx:key="order" wx:key="orderList" wx:for-item="order">
+                <text>订单号：{{order.id}}</text>
+                <view class="food-detail" wx:for="{{order.detail}}"  wx:key="orderDetailList" wx:for-item="orderDetail">
+                  <text>{{orderDetail.menuName}}</text>
+                  <view>
+                    <text>￥{{orderDetail.price}}×{{orderDetail.num}}</text>
+                  </view>
+                </view>
+                <text wx:if="{{order.remarks}}">备注：{{order.remarks}}</text>
+                <text>金额：￥{{order.subtotal}}</text>
+                <view class="time">{{order.createdAt}}</view>
+              </view>
+            </block>
+            <block wx:else>
+              <view class='today-order-none'>您还没有下单哦</view>
+            </block>
+            
+        </scroll-view>
+    </swiper-item>
+
+</swiper>
