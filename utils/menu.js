@@ -42,6 +42,10 @@ function ApiConnect() {
   ApiConnect.prototype.getAll = function (object, data, success) {
     this.requestWithJwt(object, 'get', data, success);
   }
+  ApiConnect.prototype.getOne = function (object, id, data, success) {
+    this.requestWithJwt(object+'/'+id, 'get', data, success);
+  }
+
   ApiConnect.prototype.getOpenId = function(code, options) {
     this.request('wechat/login', 'post', { 'accessToken': this.accessToken, 'code':code}, options.success);
   };

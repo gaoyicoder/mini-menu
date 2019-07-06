@@ -11,10 +11,14 @@ Page( {
     currentType:"0",
     toView:"1",
     showCart:false,
+    showTag:false,
     sumNum:0,
     sumMon:0,
     heightList: new Array(),
     orderList: [],
+    tagMenu:{},
+    tagList: {},
+    tagOtherIndexList: [],
   },
   onShareAppMessage: function () {
     var title = "点餐小程序";
@@ -180,38 +184,150 @@ Page( {
     }
   },
   addFoodNum:function(e){
-      var addFoodNum=e.target.dataset.num+1; 
-      var jdx=parseInt(e.target.dataset.jdx);
+    var that = this;
+    var menuList = that.data.menuList;
+    var menuTypeId = parseInt(e.target.dataset.menuTypeId);
+    var jdx = parseInt(e.target.dataset.jdx);
+    if (menuList[menuTypeId][jdx].tagId!=0) {
+      var app = getApp();
+      var api = app.globalData.api;
+      var selectedTag = "";
+      api.getOne('tags', menuList[menuTypeId][jdx].tagId, {}, function(result) {
+        var tagList = result.data;
+        tagList.group.forEach(function(tagGroupData) {
+          tagGroupData.selected = tagGroupData.type[0];
+          selectedTag = selectedTag + tagGroupData.name + '(' +tagGroupData.selected+')；';
+        });
+        var tagOtherIndexList = [];
+        tagList.other.type.forEach(function(typeData, index){
+          tagOtherIndexList[index] = 0;
+        });
+        var tagMenu = menuList[menuTypeId][jdx];
+        tagMenu.selectedTag = selectedTag;
+        tagMenu.jdx = jdx;
+        that.setData({
+          tagList: tagList,
+          tagOtherIndexList: tagOtherIndexList,
+          tagMenu: tagMenu,
+        });
+        that.showTag();
+      });
+    } else {
+      var addFoodNum = e.target.dataset.num + 1;
       var price = parseFloat(e.target.dataset.price);
-      var menuList=that.data.menuList;
-      var menuTypeId = parseInt(e.target.dataset.menuTypeId);
       menuList[menuTypeId][jdx].num = addFoodNum;
 
       that.setData({
         menuList: menuList,
-        sumNum:parseInt(that.data.sumNum)+1,
-        sumMon: (parseFloat(that.data.sumMon)+price).toFixed(2),
+        sumNum: parseInt(that.data.sumNum) + 1,
+        sumMon: (parseFloat(that.data.sumMon) + price).toFixed(2),
       });
+    }
+      
   },
   reduceFoodNum:function(event){
-      var redFoodNum=event.target.dataset.num-1; 
-      var idx=parseInt(event.target.dataset.idx);
-      var jdx=parseInt(event.target.dataset.jdx);
+    var that = this;
+    var menuList = that.data.menuList;
+    var menuTypeId = parseInt(event.target.dataset.menuTypeId);
+    var jdx = parseInt(event.target.dataset.jdx);
+    
+    if (menuList[menuTypeId][jdx].tagId != 0) {
+      var num = menuList[menuTypeId][jdx].num;
+      menuList[menuTypeId][jdx].num = 0;
+      menuList[menuTypeId][jdx].selectedTagList = [];
+      that.setData({
+        menuList: menuList,
+        sumNum: parseInt(that.data.sumNum) - num,
+        sumMon: (parseFloat(that.data.sumMon) - menuList[menuTypeId][jdx].price * num).toFixed(2)
+      });
+    } else {
+      var redFoodNum = event.target.dataset.num - 1;
       var price = parseFloat(event.target.dataset.price);
-      var menuList = that.data.menuList;
-      var menuTypeId = parseInt(event.target.dataset.menuTypeId);
       menuList[menuTypeId][jdx].num = redFoodNum;
       that.setData({
         menuList: menuList,
-        sumNum:parseInt(that.data.sumNum)-1,
+        sumNum: parseInt(that.data.sumNum) - 1,
         sumMon: (parseFloat(that.data.sumMon) - price).toFixed(2)
-      })
+      });
+    }
   },
   hiddenLayer:function(){
       that.setData({
           showCart:false
       })
   },
+  hideTag: function () {
+    that.setData({
+      showTag: false
+    })
+  },
+  showTag: function () {
+    that.setData({
+      showTag: true
+    })
+  },
+  tapGroupTag: function(e) {
+    var tagList = this.data.tagList;
+    tagList.group[e.target.dataset.groupIndex].selected = e.target.dataset.tag;
+    this.setData({
+      tagList: tagList
+    });
+    this.resetSelectedTag();
+  },
+  tapOtherTag: function(e) {
+    var tagOtherIndexList = this.data.tagOtherIndexList;
+    tagOtherIndexList[e.target.dataset.otherIndex] = tagOtherIndexList[e.target.dataset.otherIndex]==1 ? 0 : 1;
+    this.setData({
+      tagOtherIndexList: tagOtherIndexList
+    });
+    this.resetSelectedTag();
+  },
+  resetSelectedTag: function() {
+    var tagMenu = this.data.tagMenu;
+    var tagList = this.data.tagList;
+    var tagOtherIndexList = this.data.tagOtherIndexList;
+    var selectedTag = "";
+    tagList.group.forEach(function (tagGroupData) {
+      selectedTag = selectedTag + tagGroupData.name + '(' + tagGroupData.selected + ')；';
+    });
+    var selectedOtherTag = "";
+    tagOtherIndexList.forEach(function(other, index) {
+      if(other == 1) {
+        if (selectedOtherTag == "") {
+          selectedOtherTag = tagList.other.type[index];
+        } else {
+          selectedOtherTag = selectedOtherTag + "," + tagList.other.type[index];
+        }
+      }
+    });
+    if (selectedOtherTag != "") {
+      selectedTag = selectedTag + tagList.other.name + '(' + selectedOtherTag + ')；'
+    }
+    tagMenu.selectedTag = selectedTag;
+    this.setData({
+      tagMenu: tagMenu
+    });
+  },
+  tagDone: function () {
+    var tagMenu = this.data.tagMenu;
+    var menuList = this.data.menuList;
+
+    tagMenu.num = tagMenu.num + 1;
+    var price = parseFloat(tagMenu.price);
+    menuList[tagMenu.menuTypeId][tagMenu.jdx].num = tagMenu.num;
+    if (menuList[tagMenu.menuTypeId][tagMenu.jdx].selectedTagList == undefined) {
+      menuList[tagMenu.menuTypeId][tagMenu.jdx].selectedTagList = Array();
+    }
+    menuList[tagMenu.menuTypeId][tagMenu.jdx].selectedTagList.push(tagMenu.selectedTag);
+
+    this.setData({
+      menuList: menuList,
+      sumNum: parseInt(that.data.sumNum) + 1,
+      sumMon: (parseFloat(that.data.sumMon) + price).toFixed(2),
+    });
+    this.hideTag();
+  },
+
   clearCart:function(){
     var menuList=that.data.menuList;
     menuList.forEach(function (typeMenuList, index){
@@ -234,11 +350,16 @@ Page( {
     menuList.forEach(function (typeMenuList, index){
       for (var j = 0; j < typeMenuList.length; j++) {
         if (typeMenuList[j].num > 0) {
+          var selectedTagList = [];
+          if (typeMenuList[j].selectedTagList != undefined) {
+            selectedTagList = typeMenuList[j].selectedTagList;
+          }
           var temp = {
             menuId: typeMenuList[j].id,
             menuName: typeMenuList[j].menuName,
             num: typeMenuList[j].num,
             price: typeMenuList[j].price,
+            selectedTagList: selectedTagList,
           };
           detailArray.push(temp);
         }

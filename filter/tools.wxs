@@ -1,0 +1,19 @@
+var Tools = {
+  formatTagName: function(tag) {
+    if (tag.indexOf('+')>0) {
+      return tag.substring(0, tag.indexOf('+'));
+    } else {
+      return tag;
+    }
+  },
+
+  formatTagSelected: function(tagSelected) {
+    var reg = getRegExp("\+\d+", 'g');
+    return tagSelected.replace(reg, "");
+  }
+}
+
+module.exports = {
+  formatTagName: Tools.formatTagName,
+  formatTagSelected: Tools.formatTagSelected
+}

@@ -165,3 +165,19 @@ page{background:#f0f0f0;font-family: "微软雅黑",Helvetica, Arial, "Hiragino 
   top: -2px;
   right: 10px;
 }
+
+/*味型栏css*/
+.tag-layer{width: 100%;height:100%;background:#000;opacity:0.5;position:fixed;left:0;top:0;z-index:3;}
+.tag-detail{position:fixed;left:0;bottom:0;width:100%;z-index:4;background:#fff;}
+.tag-content {padding: 10px;}
+.tag-content image{width:70px;height:70px;border-radius:6px; margin: 0px 10px 0 0; border:1px solid #ccc;float:left;}
+.tag-content .tag-selected-type {font-size:12px;}
+.tag-content .tag-title {font-size: 17px;}
+.tag-content .tag-money {font-size: 17px;}
+.tag-type-list {padding: 10px; width: 100%;white-space:normal;}
+.tag-type-list label{ border:1px solid #ccc;border-radius:5px; margin: 0 8px 10px 8px; padding: 5px 10px; display: block; float: left;font-size: 14px;}
+.tag-type-list label.selected {background:#000;color: #FFF;}
+.tag-detail .tag-button { clear:both; margin: 10px; background:#000; color: #FFF;}
+.tag-type-title {clear:both; font-size: 17px;}
+.tag-detail .close-button {width: 15px; height: 15px; position: absolute; top: 10px; right: 10px;}
+.tag-detail .tag-group {padding:5px 0 30px 10px;}

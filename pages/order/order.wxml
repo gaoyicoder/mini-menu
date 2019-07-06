@@ -1,3 +1,4 @@
+<wxs module="tools" src="../../filter/tools.wxs"></wxs>
 <view class="place"></view>
 <view class="swiper-tab">
     <view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">点餐</view>
@@ -73,7 +74,37 @@
                 </button>
             </view>
         </view>
-
+        <!-- 味型栏 -->
+        <view class="tag-layer" wx:if="{{showTag}}" bindtap="hideTag"></view>
+        <view class="tag-detail" wx:if="{{showTag}}">
+          <image class='close-button' src="/assets/images/close.png" bindtap="hideTag"></image>
+          <view class="tag-content">
+            <image src="{{tagMenu.imageUrl}}" mode="aspectFill"></image>
+            <view>
+              <text class='tag-title'>{{tagMenu.menuName}}</text>
+              <view class='tag-selected-type'>
+                <text>已选：{{tools.formatTagSelected(tagMenu.selectedTag)}}</text>
+              </view>
+              <view class='sale-number'>
+                <text class='tag-money'>￥{{tagMenu.price}}</text>
+              </view>
+            </view>
+          </view>
+          <view class='tag-group'>
+            <view wx:for="{{tagList.group}}" wx:key="tagGroup" wx:for-item="tagGroup" wx:for-index="idx">
+              <view class='tag-type-title'>{{tagGroup.name}}</view>
+              <view class='tag-type-list'>
+                <label class="{{tag==tagList.group[idx].selected?'selected':''}}" bindtap="tapGroupTag" wx:for="{{tagGroup.type}}" wx:key="tagOther" wx:for-item="tag" wx:for-index="jdx" data-tag="{{tag}}" data-group-index="{{idx}}">{{tools.formatTagName(tag)}}</label>
+              </view>
+            </view>
+            <view class='tag-type-title'>{{tagList.other.name}}</view>
+            <view class='tag-type-list'>
+              <label class="{{tagOtherIndexList[idx]==1?'selected':''}}" bindtap="tapOtherTag" wx:for="{{tagList.other.type}}" wx:key="tagOther" wx:for-item="tag" wx:for-index="idx" data-other-index="{{idx}}">{{tools.formatTagName(tag)}}</label>
+            </view>
+          </view>
+          <button class='tag-button' bindtap='tagDone'>选好了</button>
+        </view>
+        <!-- 味型栏END -->
 
     </swiper-item>
 
